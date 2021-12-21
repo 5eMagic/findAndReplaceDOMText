@@ -94,6 +94,7 @@
 	 * @param {RegExp} options.find The regular expression to match
 	 * @param {String|Element} [options.wrap] A NodeName, or a Node to clone
 	 * @param {String} [options.wrapClass] A classname to append to the wrapping element
+	 * @param {Object} [options.wrapAttributes] Attributes to append to the wrapping element
 	 * @param {String|Function} [options.replace='$&'] What to replace each match with
 	 * @param {Function} [options.filterElements] A Function to be called to check whether to
 	 *	process an element. (returning true = process element,
@@ -484,6 +485,7 @@
 			var replacement = this.options.replace || '$&';
 			var wrapper = this.options.wrap;
 			var wrapperClass = this.options.wrapClass;
+            var wrapperAttributes = this.options.wrapAttributes;
 
 			if (wrapper && wrapper.nodeType) {
 				// Wrapper has been provided as a stencil-node for us to clone:
@@ -505,6 +507,12 @@
  			if (el && wrapperClass) {
 				el.className = wrapperClass;
 			}
+
+            if (el && wrapperAttributes) {
+                for (attr in wrapperAttributes) {
+                    el.setAttribute(attr, wrapperAttributes[attr]);
+                }
+            }
 
 			replacement = doc.createTextNode(
 				this.prepareReplacementString(
